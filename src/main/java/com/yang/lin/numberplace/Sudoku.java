@@ -16,7 +16,6 @@ public class Sudoku {
     private int[][] next;
     /**
      * 输出数独
-     *
      * @param salt
      */
     public void process(Integer salt) {

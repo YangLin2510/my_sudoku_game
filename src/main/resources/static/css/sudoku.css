@@ -1,0 +1,24 @@
+.logo{
+    background-color: #ff291a;
+}
+
+.sudoku-table tr td{
+    width: 100px;
+    height: 100px;
+    border: solid #ff291a;
+    text-align: center;
+    font-size: xx-large;
+    font-weight: bold;
+}
+.sudoku-table{
+    margin-top: 10px;
+}
+.game-time{
+    font-size: xx-large;
+    color: #54ff55;
+    font-weight: bold;
+    text-align: center;
+}
+.game-info-div div{
+    margin-top:100px;
+}
