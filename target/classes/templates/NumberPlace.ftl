@@ -15,115 +15,28 @@
     <div class="row">
         <div class="col-md-10">
             <table class="sudoku-table">
-                <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                </tr>
+                <#list data as list>
+                   <tr>
+                       <#list list as item>
+                           <#if item == 0>
+                               <td><input maxlength="1" pattern="[0-9]" class="user_input"></td>
+                           </#if>
+                           <#if item !=0>
+                               <td><input readonly value="${item}" class="init_numbers"></td>
+                           </#if>
+                       </#list>
+                   </tr>
+                </#list>
             </table>
         </div>
 
         <div class="col-md-2 game-info-div">
             <div class="game-time">00:00</div>
             <div>
-                <button class="btn btn-danger btn-block">重新开始</button>
+                <button class="btn btn-danger btn-block" onclick="reloadGame()">重新开始</button>
             </div>
             <div>
-                <button class="btn btn-success btn-block">检查结果</button>
+                <button class="btn btn-success btn-block" onclick="checkResult()">检查结果</button>
             </div>
         </div>
     </div>
@@ -131,6 +44,7 @@
 </body>
 <script src="webjars/jquery/2.1.3/jquery.min.js"></script>
 <script>
+    //计算加载页面到当前经过的分秒
     var second = 0;
     setInterval(function () {
         second += 1;
@@ -162,6 +76,62 @@
             }
         }
         $(".game-time").html(value);
-    }, 1000)
+    }, 1000);
+
+    /**
+      重新加载
+     **/
+    function reloadGame() {
+        window.location.reload(true);
+    }
+
+    /**
+     * 检查数组是否是合法的数独
+     */
+    function checkResult() {
+         var sArray = new Array();
+         $(".sudoku-table").find("input").each(function () {
+             sArray.push($(this).val());
+         });
+         var sudokuArray = new Array();
+         for(var i=0;i<9;i++){
+             var list = sArray.slice(i*9,i*9+9);
+             sudokuArray.push(list);
+         }
+         for(var x=0;x<9;x++){
+             for(var y=0;y<9;y++){
+                 if(!checkPositionValid(x,y,sudokuArray)){
+                     alert("第"+parseInt(x+1)+"行"+parseInt(y+1)+"列的数字不合法");
+                     return;
+                 }
+             }
+         }
+         alert("成功了 恭喜 !");
+    }
+
+    function checkPositionValid(x,y,sudoku) {
+        if (x < 0 || y < 0 || x > 8 || y > 8 || sudoku[x][y]==0) {
+            return false
+        }
+
+        //行列重复检测
+        for (var i = 0; i < 9; i++) {
+            if ((i != y && sudoku[x][i] == sudoku[x][y]) || (i != x && sudoku[i][y] == sudoku[x][y])) {
+                return false;
+            }
+        }
+
+        //1.获取单元格起始位置
+        var startX = parseInt((x / 3)) * 3;
+        var startY = parseInt((y / 3)) * 3;
+        for (var xx = startX; xx < startX + 3; xx++) {
+            for (var yy = startY; yy < startY + 3; yy++) {
+                if (xx != x && yy != y && sudoku[x][y] == sudoku[xx][yy]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 </script>
 </html>

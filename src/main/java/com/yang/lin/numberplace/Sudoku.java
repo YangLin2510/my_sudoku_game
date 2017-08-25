@@ -3,6 +3,8 @@ package com.yang.lin.numberplace;
 
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
+
 @Service
 public class Sudoku {
     private static final int SIZE = 9;
@@ -11,9 +13,12 @@ public class Sudoku {
     private boolean nextFlag = false;
     private int G_X = 0;
     private int G_y = 0;
-
-
     private int[][] next;
+    private static final Random r = new Random();
+
+    public Sudoku(){
+        sudoku[0][0] = r.nextInt(8);
+    }
     /**
      * 输出数独
      * @param salt
@@ -204,4 +209,35 @@ public class Sudoku {
         return copySudoku;
     }
 
+    /**
+     * 初始化数独,过滤完整的数独，每个小单元格只留3个元素。其他设置为0.
+     * @param sudokuGame
+     * @return
+     */
+    public  static int[][] initSudokuGame(int[][] sudokuGame){
+        int[][] result = new int[9][9];
+        for(int x=0;x<3;x++){
+            for(int y=0;y<3;y++){
+               int startx = x*3;
+               int straty = y*3;
+               for(int initNumber=0;initNumber<3;initNumber++){
+                   int randomX = r.nextInt(3);
+                   int randomY = r.nextInt(3);
+                   if(result[startx+randomX][straty+randomY]==0){
+                       result[startx+randomX][straty+randomY] = sudokuGame[startx+randomX][straty+randomY];
+                   }
+                   int selectedNumer = 0;
+                   for(int i = startx;i<startx+3;i++){
+                       for(int j=straty;j<straty+3;j++){
+                           if(result[i][j]!=0){
+                               selectedNumer+=1;
+                           }
+                       }
+                   }
+                   initNumber = selectedNumer-1;
+               }
+            }
+        }
+        return result;
+    }
 }

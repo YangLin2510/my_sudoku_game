@@ -10,6 +10,12 @@
     font-size: xx-large;
     font-weight: bold;
 }
+.sudoku-table input{
+    width: 50px;
+    height: 50px;
+    border-style: none;
+    padding-left: 15px;
+}
 .sudoku-table{
     margin-top: 10px;
 }
@@ -21,4 +27,7 @@
 }
 .game-info-div div{
     margin-top:100px;
+}
+.init_numbers{
+    color: #ff291a;
 }
