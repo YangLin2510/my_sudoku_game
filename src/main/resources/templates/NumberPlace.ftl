@@ -133,5 +133,30 @@
         }
         return true;
     }
+
+    $(document).ready(function () {
+        var x =0;
+        var y =0;
+        //画九宫格
+        $(".sudoku-table").find("td").each(function () {
+
+            var altX = x<3?x:parseInt(x%3);
+            var altY = (parseInt(y/9) < 3)?parseInt(y/9):(parseInt(y/9)%3);
+            if(altX===2){
+                $(this).css("border-right-color","#ff291a").css("border-right-width","5px");
+            }
+            if(altX===0){
+                $(this).css("border-left-color","#ff291a").css("border-left-width","5px");
+            }
+            if(altY===0){
+                $(this).css("border-top-color","#ff291a").css("border-top-width","5px");
+            }
+            if(altY===2){
+                $(this).css("border-bottom-color","#ff291a").css("border-bottom-width","5px");
+            }
+            x+=1;
+            y+=1;
+        });
+    })
 </script>
 </html>
