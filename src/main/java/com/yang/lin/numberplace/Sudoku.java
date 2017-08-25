@@ -9,7 +9,6 @@ import java.util.Random;
 public class Sudoku {
     private static final int SIZE = 9;
     private int[][] sudoku = new int[SIZE][SIZE];
-    private  int OUT_PUT_NUMBER = Integer.MAX_VALUE;
     private boolean nextFlag = false;
     private int G_X = 0;
     private int G_y = 0;
@@ -24,9 +23,6 @@ public class Sudoku {
      * @param salt
      */
     public void process(Integer salt) {
-        if (salt != null && salt >= 1 && salt <= 9) {
-            sudoku[0][0] = salt;
-        }
         process(0, 0, false);
     }
 
@@ -46,7 +42,6 @@ public class Sudoku {
      * @param stopble 是不是在找到一个结果之后中断，如果不中断则会一直打印出结果
      */
     private void process(int global_x, int global_y, boolean stopble) {
-        int out = 0;
         boolean backFLag = false;
         for (int x = global_x; x < SIZE; x++) {
             for (int y = backFLag ? 8 : global_y; y < SIZE; y++) {
@@ -82,9 +77,6 @@ public class Sudoku {
                     if (!stopble) printSudoku(sudoku);
                     nextFlag = true;
                     next = copy();
-                    if (++out == OUT_PUT_NUMBER) {
-                        return;
-                    }
                     //回溯到上一个数
                     sudoku[x][y] = 0;
                     if (y == 0) {
@@ -111,9 +103,6 @@ public class Sudoku {
                                 if (!stopble) printSudoku(sudoku);
                                 nextFlag = true;
                                 next = copy();
-                                if (++out == OUT_PUT_NUMBER) {
-                                    return;
-                                }
                                 //回溯到上一个数
                                 sudoku[x][y] = 0;
                                 if (y == 0) {
